@@ -11,7 +11,7 @@ services:
     volumes:
       - ./downloads:/downloads  # Folder for downloaded files
       - ./data:/data  # Additional persistent data storage
-      - ./config/qBittorrent:/root/.config/qBittorrent  # Map qBittorrent config to host
+      - ./data/qBittorrent:/root/.config/qBittorrent  # Map qBittorrent config to host
     environment:
       - DEBIAN_FRONTEND=noninteractive
 
