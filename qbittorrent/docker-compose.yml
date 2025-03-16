@@ -1,28 +1,6 @@
 version: '3.8'
 
 services:
-  wireguard:
-    image: linuxserver/wireguard
-    container_name: wireguard
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - PEERS=1
-      - PEERDNS=auto
-      - INTERNAL_SUBNET=10.13.13.0
-    volumes:
-      - ./config/wireguard:/config
-      - /lib/modules:/lib/modules
-    ports:
-      - 51820:51820/udp
-      - 8081:8081  # Publish port 8081
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-    restart: unless-stopped
-
   qbittorrent:
     build: .  # Builds the image using the Dockerfile in the same directory
     container_name: qbittorrent
@@ -33,9 +11,9 @@ services:
       - ./config/qBittorrent:/root/.config/qBittorrent  # Map qBittorrent config to host
     environment:
       - DEBIAN_FRONTEND=noninteractive
-    command: ["qbittorrent-nox", "--webui-port=8081"]  # Changed port to 8081
-    depends_on:
-      - wireguard
-    network_mode: service:wireguard
-
-#echo "IP Address: $(curl -s http://checkip.amazonaws.com) Country: $(curl -s https://ipinfo.io/$(curl -s http://checkip.amazonaws.com)/country)"
+    ports:
+      - "8080:8080"  # Expose port 8080 for the Web UI
+      - "6881:6881"  # Expose port 6881 for torrenting (TCP)
+      - "6881:6881/udp"  # Expose port 6881 for torrenting (UDP)
+    cap_add:
+      - NET_ADMIN  # Add NET_ADMIN capability to manage network interfaces
