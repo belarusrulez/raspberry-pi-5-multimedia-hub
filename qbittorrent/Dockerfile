@@ -6,17 +6,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Update package list and install dependencies
 RUN apt-get update && apt-get install -y \
-        net-tools \
-        qbittorrent-nox \
-        curl \
-        wireguard \
-        bash-completion \
-        vim \
-        git \
-        htop \
-        iproute2 \
-        iptables \
-        && rm -rf /var/lib/apt/lists/*
+    net-tools \
+    qbittorrent-nox \
+    curl \
+    wireguard \
+    bash-completion \
+    vim \
+    git \
+    htop \
+    iproute2 \
+    iptables \
+    resolvconf \
+    && rm -rf /var/lib/apt/lists/*
 
 # Expose ports (8080 for Web UI, 6881 for torrent traffic)
 EXPOSE 8080 6881 6881/udp

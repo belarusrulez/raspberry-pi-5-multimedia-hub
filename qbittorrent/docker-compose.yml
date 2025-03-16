@@ -17,3 +17,5 @@ services:
       - "6881:6881/udp"  # Expose port 6881 for torrenting (UDP)
     cap_add:
       - NET_ADMIN  # Add NET_ADMIN capability to manage network interfaces
+    sysctls:
+      - net.ipv4.ip_forward=1  # Enable IP forwarding
