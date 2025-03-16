@@ -16,20 +16,24 @@ services:
       - DEBIAN_FRONTEND=noninteractive
 
   wireguard:
-    image: linuxserver/wireguard
     container_name: wireguard
-    restart: unless-stopped
-    volumes:
-      - ./config/wireguard:/config  # Mount WireGuard config directory
-    environment:
-      - PUID=1000  # Set the user id
-      - PGID=1000  # Set the group id
-      - TZ=Europe/London  # Set timezone
+    image: jordanpotter/wireguard
     cap_add:
-      - NET_ADMIN  # Allow network administration capabilities
+      - NET_ADMIN
+      - SYS_MODULE
     sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1  # Enable IP forwarding
+      net.ipv4.conf.all.src_valid_mark: 1
+    volumes:
+      - ./config/wireguard/wg0.conf:/etc/wireguard/wg0.conf
+    restart: unless-stopped
     ports:
       - "8080:8080"  # Expose port 8080 for qBittorrent Web UI
       - "6881:6881"  # Expose port 6881 for torrenting (TCP)
       - "6881:6881/udp"  # Expose port 6881 for torrenting (UDP)
+
+#  curl:
+#    image: curlimages/curl
+#    command: ifconfig.io
+#    network_mode: service:wireguard
+#    depends_on:
+#      - wireguard
