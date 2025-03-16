@@ -1,18 +1,36 @@
-version: '3.8'
+version: '3.7'
 
 services:
   qbittorrentvpn:
-    image: dyonr/qbittorrentvpn
+    image: binhex/arch-qbittorrentvpn
     container_name: qbittorrentvpn
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
     privileged: true
-    restart: unless-stopped
     ports:
-      - "8080:8080"
+      - 8080:8080
+      - 8118:8118
+      - 58946:58946
+      - 58946:58946/udp
+    volumes:
+      - ./config:/data
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
     environment:
       - VPN_ENABLED=yes
-      - VPN_TYPE=wireguard
-      - LAN_NETWORK=192.168.0.0/24
-      - INSTALL_PYTHON3=yes
-    volumes:
-      - ./config:/config
-      - ./downloads:/downloads
+      - VPN_PROV=custom
+      - VPN_CLIENT=wireguard
+      - ENABLE_STARTUP_SCRIPTS=no
+      - ENABLE_PRIVOXY=yes
+      - STRICT_PORT_FORWARD=yes
+      - USERSPACE_WIREGUARD=no
+      - ENABLE_SOCKS=no
+      - LAN_NETWORK=192.168.1.0/24
+      - NAME_SERVERS=1.1.1.1,1.0.0.1
+      - VPN_INPUT_PORTS=1234
+      - VPN_OUTPUT_PORTS=5678
+      - DEBUG=false
+      - WEBUI_PORT=8080
+      - UMASK=000
+      - PUID=0
+      - PGID=0
