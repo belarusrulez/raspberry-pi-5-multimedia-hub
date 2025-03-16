@@ -9,14 +9,12 @@ RUN apt-get update && apt-get install -y \
     net-tools \
     qbittorrent-nox \
     curl \
-    wireguard \
     bash-completion \
     vim \
-    git \
     htop \
     iproute2 \
     iptables \
-    resolvconf \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Expose ports (8080 for Web UI, 6881 for torrent traffic)
@@ -27,9 +25,6 @@ RUN mkdir -p /config && chmod -R 777 /config
 
 # Remove any existing socket file to avoid issues
 RUN rm -f /root/.config/qBittorrent/ipc-socket
-
-# Copy WireGuard configuration file
-COPY ./config/wireguard/wg0.conf /etc/wireguard/wg0.conf
 
 # Copy the IP check script
 COPY ./sh/start.sh /usr/local/bin/start.sh
