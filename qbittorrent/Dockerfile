@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Update package list and install dependencies
 RUN apt-get update && apt-get install -y \
     qbittorrent-nox \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Expose ports (8080 for Web UI, 6881 for torrent traffic)
