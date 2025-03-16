@@ -10,8 +10,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - SERVERURL=yourserverurl
-      - SERVERPORT=51820
       - PEERS=1
       - PEERDNS=auto
       - INTERNAL_SUBNET=10.13.13.0
@@ -39,3 +37,5 @@ services:
     depends_on:
       - wireguard
     network_mode: service:wireguard
+
+#echo "IP Address: $(curl -s http://checkip.amazonaws.com) Country: $(curl -s https://ipinfo.io/$(curl -s http://checkip.amazonaws.com)/country)"

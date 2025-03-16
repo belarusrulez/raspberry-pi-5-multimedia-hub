@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Update package list and install dependencies
 RUN apt-get update && apt-get install -y \
+    net-tools \
     qbittorrent-nox \
     curl \
     && rm -rf /var/lib/apt/lists/*
@@ -20,3 +21,6 @@ RUN rm -f /root/.config/qBittorrent/ipc-socket
 
 # Command to run qBittorrent with Web UI enabled
 CMD ["qbittorrent-nox", "--webui-port=8080"]
+
+#echo "IP Address: $(curl --interface wg0 -s http://checkip.amazonaws.com) Country: $(curl -s https://ipinfo.io/$(curl -s http://checkip.amazonaws.com)/country)"
+#echo "IP Address: $(curl --interface wg0 -s http://checkip.amazonaws.com) Country: $(curl --interface wg0 -s https://ipinfo.io/$(curl --interface wg0 -s http://checkip.amazonaws.com)/country)"
