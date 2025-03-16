@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  qbittorrentvpn:
+    image: dyonr/qbittorrentvpn
+    container_name: qbittorrentvpn
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - VPN_ENABLED=yes
+      - VPN_TYPE=wireguard
+      - LAN_NETWORK=192.168.0.0/24
+      - INSTALL_PYTHON3=yes
+    volumes:
+      - ./config:/config
+      - ./downloads:/downloads
