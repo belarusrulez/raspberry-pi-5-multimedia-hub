@@ -5,16 +5,15 @@ services:
     build: .  # Builds the image using the Dockerfile in the same directory
     container_name: qbittorrent
     restart: unless-stopped
+    network_mode: "service:wireguard"  # Use WireGuard's network stack
+    depends_on:
+      - wireguard  # Ensure WireGuard starts first
     volumes:
       - ./downloads:/downloads  # Folder for downloaded files
       - ./data:/data  # Additional persistent data storage
       - ./config/qBittorrent:/root/.config/qBittorrent  # Map qBittorrent config to host
     environment:
       - DEBIAN_FRONTEND=noninteractive
-    ports:
-      - "8080:8080"  # Expose port 8080 for the Web UI
-      - "6881:6881"  # Expose port 6881 for torrenting (TCP)
-      - "6881:6881/udp"  # Expose port 6881 for torrenting (UDP)
 
   wireguard:
     image: linuxserver/wireguard
@@ -26,9 +25,11 @@ services:
       - PUID=1000  # Set the user id
       - PGID=1000  # Set the group id
       - TZ=Europe/London  # Set timezone
-    ports:
-      - "51820:51820/udp"  # Expose the WireGuard port
     cap_add:
       - NET_ADMIN  # Allow network administration capabilities
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1  # Enable IP forwarding
+    ports:
+      - "8080:8080"  # Expose port 8080 for qBittorrent Web UI
+      - "6881:6881"  # Expose port 6881 for torrenting (TCP)
+      - "6881:6881/udp"  # Expose port 6881 for torrenting (UDP)

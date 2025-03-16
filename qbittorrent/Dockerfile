@@ -1,4 +1,3 @@
-# Use Ubuntu as base image
 FROM ubuntu:latest
 
 # Set environment variables
