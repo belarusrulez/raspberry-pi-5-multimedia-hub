@@ -10,8 +10,9 @@ services:
       - "6881:6881"  # Torrent traffic (TCP)
       - "6881:6881/udp"  # Torrent traffic (UDP)
     volumes:
-      - ./config:/config  # Persistent configuration storage
       - ./downloads:/downloads  # Folder for downloaded files
+      - ./data:/data  # Additional persistent data storage
+      - ./config/qBittorrent:/root/.config/qBittorrent  # Map qBittorrent config to host
     environment:
       - DEBIAN_FRONTEND=noninteractive
     command: ["qbittorrent-nox", "--webui-port=8080"]

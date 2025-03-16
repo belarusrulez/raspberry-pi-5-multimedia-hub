@@ -14,5 +14,8 @@ EXPOSE 8080 6881 6881/udp
 # Create a configuration directory
 RUN mkdir -p /config && chmod -R 777 /config
 
+# Remove any existing socket file
+RUN rm -f /root/.config/qBittorrent/ipc-socket
+
 # Command to run qBittorrent with Web UI enabled
 CMD ["qbittorrent-nox", "--webui-port=8080"]
