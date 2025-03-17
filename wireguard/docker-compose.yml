@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  wireguard-stable:
+    container_name: wireguard-stable
+    image: jordanpotter/wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      net.ipv4.conf.all.src_valid_mark: 1
+    volumes:
+      - ./wireguard:/etc/wireguard
+    restart: unless-stopped
+
+  curl:
+    image: curlimages/curl
+    command: ifconfig.io
+    network_mode: service:wireguard-stable
+    depends_on:
+      - wireguard-stable
+
+#        ADD qbittorrent here
