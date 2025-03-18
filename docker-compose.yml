@@ -10,19 +10,30 @@ services:
     sysctls:
       net.ipv4.conf.all.src_valid_mark: 1
     volumes:
-      - ./wireguard:/etc/wireguard
-      - ./downloads:/downloads  # Folder for downloaded files
-      - ./data:/data  # Additional persistent data storage
-      - ./data/qBittorrent:/root/.config/qBittorrent  # Map qBittorrent config to host
+      - /mount/wireguard:/etc/wireguard
+      - /mount/downloads:/downloads  # Folder for downloaded files
+      - /mount/qBittorrent/config:/root/.config/qBittorrent  # Map qBittorrent config to host
     ports:
       - "8080:8080"  # Expose port 8080 for qBittorrent Web UI
       - "6881:6881"  # Expose port 6881 for torrenting (TCP)
       - "6881:6881/udp"  # Expose port 6881 for torrenting (UDP)
     restart: unless-stopped
 
-  curl:
-    image: curlimages/curl
-    command: ifconfig.io
-    network_mode: service:wireguard
-    depends_on:
-      - wireguard
+#  curl:
+#    image: curlimages/curl
+#    command: ifconfig.io
+#    network_mode: service:wireguard
+#    depends_on:
+#      - wireguard
+
+  jellyfin:
+    image: jellyfin/jellyfin
+    user: 501:20
+    container_name: jellyfin
+    volumes:
+      - /mount/jellyfin/config:/config  # Jellyfin configuration
+      - /mount/jellyfin/cache:/cache  # Jellyfin cache
+      - /media:/media  # Media files mount with -  colima stop && colima start --mount /Volumes/2TB/media:/media:w --mount $(pwd)/mount:/mount:w
+    ports:
+      - "8096:8096"  # Expose port 8096 for Jellyfin Web UI
+    restart: unless-stopped
