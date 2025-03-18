@@ -25,15 +25,3 @@ services:
 #    network_mode: service:wireguard
 #    depends_on:
 #      - wireguard
-
-  jellyfin:
-    image: jellyfin/jellyfin
-    user: 501:20
-    container_name: jellyfin
-    volumes:
-      - /mount/jellyfin/config:/config  # Jellyfin configuration
-      - /mount/jellyfin/cache:/cache  # Jellyfin cache
-      - /media:/media  # Media files mount with -  colima stop && colima start --mount /Volumes/2TB/media:/media:w --mount $(pwd)/mount:/mount:w
-    ports:
-      - "8096:8096"  # Expose port 8096 for Jellyfin Web UI
-    restart: unless-stopped
