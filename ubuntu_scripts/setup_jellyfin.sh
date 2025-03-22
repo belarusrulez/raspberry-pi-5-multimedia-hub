@@ -7,7 +7,7 @@ sudo apt update -y
 sudo apt install -y apt-transport-https software-properties-common
 
 # Add the Jellyfin repository
-yes | curl https://repo.jellyfin.org/install-debuntu.sh | sudo bash
+curl https://repo.jellyfin.org/install-debuntu.sh | sudo bash
 
 # Update the package list and install Jellyfin
 sudo apt update -y
