@@ -7,9 +7,9 @@ LOCAL_DIR="$(cd "$(dirname "$0")" && pwd)"
 sudo apt-get update -y
 sudo apt-get install -y qbittorrent-nox
 
-sudo systemctl stop qbittorrent-nox
 # Create qBittorrent.conf systemd service file for qBittorrent-nox
 sudo mkdir -p /home/belarusrulez/.config/qBittorrent
+sudo chown -R belarusrulez:belarusrulez /home/belarusrulez/.config/qBittorrent
 cp -f $LOCAL_DIR/files/qBittorrent/qBittorrent.conf /home/belarusrulez/.config/qBittorrent/qBittorrent.conf
 
 # Enable and start the qBittorrent-nox service
