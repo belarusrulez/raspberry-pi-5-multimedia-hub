@@ -1,0 +1,13 @@
+# WireGuard configuration
+*.key
+client_private.key
+client_public.key
+.env
+
+# IDE files
+.idea/
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db 

@@ -3,6 +3,14 @@ set -x
 set -e
 
 LOCAL_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+if [ -f .env ]; then
+    source .env
+else
+    echo "Error: .env file not found"
+    exit 1
+fi
+
 # Update the system and install dependencies
 sudo apt update -y
 sudo apt install -y wireguard wireguard-tools
@@ -14,14 +22,26 @@ chmod 600 client_private.key  # Set correct permissions on the private key
 # Create the WireGuard configuration directory
 sudo mkdir -p /etc/wireguard
 
-# Client configuration (replace placeholders with your actual values)
-cp -f $LOCAL_DIR/files/wireguard/wg0.conf /etc/wireguard/wg0.conf
-chmod 600 /etc/wireguard/wg0.conf  # Ensure correct permissions on the config file
+# Create wg0.conf with environment variables
+sudo tee /etc/wireguard/wg0.conf << EOF
+[Interface]
+PrivateKey = ${WG_PRIVATE_KEY}
+Address = ${WG_ADDRESS}
+DNS = ${WG_DNS}
 
-# Optionally stop and bring down the existing WireGuard interface
-sudo wg-quick up wg0
-sudo systemctl stop wg-quick@wg0
-sudo wg-quick down wg0
+[Peer]
+PublicKey = ${WG_PEER_PUBLIC_KEY}
+PresharedKey = ${WG_PRESHARED_KEY}
+AllowedIPs = ${WG_ALLOWED_IPS}
+Endpoint = ${WG_ENDPOINT}
+PersistentKeepalive = ${WG_PERSISTENT_KEEPALIVE}
+EOF
+
+sudo chmod 600 /etc/wireguard/wg0.conf  # Ensure correct permissions on the config file
+
+# Stop and bring down any existing WireGuard interface
+sudo systemctl stop wg-quick@wg0 || true
+sudo wg-quick down wg0 || true
 
 # Enable and start WireGuard on the client
 sudo systemctl enable wg-quick@wg0
@@ -32,10 +52,10 @@ sudo wg show
 
 # Use curl to check the public IP via the WireGuard interface
 if [ "$(curl --interface wg0 -s ipinfo.io/country)" = "RO" ]; then
-  echo "The country is Romania (RO)."
+    echo "The country is Romania (RO)."
 else
-  echo "The country is not Romania (RO)."
-  exit 1
+    echo "The country is not Romania (RO)."
+    exit 1
 fi
 
 echo "WireGuard client configuration completed."
