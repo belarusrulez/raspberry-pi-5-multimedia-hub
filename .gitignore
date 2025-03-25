@@ -1,7 +1,5 @@
 # WireGuard configuration
 *.key
-client_private.key
-client_public.key
 .env
 
 # IDE files
