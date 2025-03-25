@@ -51,10 +51,10 @@ sudo systemctl start wg-quick@wg0
 sudo wg show
 
 # Use curl to check the public IP via the WireGuard interface
-if [ "$(curl --interface wg0 -s ipinfo.io/country)" = "RO" ]; then
-    echo "The country is Romania (RO)."
+if [ "$(curl --interface wg0 -s ipinfo.io/country)" = "${WG_EXPECTED_COUNTRY}" ]; then
+    echo "The country is ${WG_EXPECTED_COUNTRY}."
 else
-    echo "The country is not Romania (RO)."
+    echo "The country is not ${WG_EXPECTED_COUNTRY}."
     exit 1
 fi
 

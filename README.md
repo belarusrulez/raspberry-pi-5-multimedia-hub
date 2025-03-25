@@ -84,6 +84,9 @@ WG_PRESHARED_KEY=preshared_key_here
 WG_ALLOWED_IPS=0.0.0.0/0  # Route all traffic through VPN
 WG_ENDPOINT=your.server.com:51820  # Server address and port
 WG_PERSISTENT_KEEPALIVE=25  # Keep connection alive every 25 seconds
+
+# VPN Location Verification
+WG_EXPECTED_COUNTRY=RO  # Expected country code (e.g., RO for Romania)
 ```
 
 **Important Security Notes:**
